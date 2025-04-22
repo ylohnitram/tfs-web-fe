@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react';
 import type { Signal, SeasonalitySentiment } from '@/types';
 
@@ -9,19 +8,39 @@ interface SignalsListProps {
 }
 
 const SignalsList = ({ signals, seasonalSentiment, isLoading }: SignalsListProps) => {
-  // Filter signals based on seasonality sentiment
-  const filteredSignals = useMemo(() => {
-    if (!signals) return [];
+  // Calculate RRR based on seasonality sentiment
+  const calculateRRR = (signal: Signal) => {
+    // Get base RRR depending on seasonality
+    const baseRRR = seasonalSentiment === 'neutral' ? 2 : 3;
     
-    if (seasonalSentiment === 'neutral') {
-      return signals; // Show all signals
-    } else if (seasonalSentiment === 'bullish') {
-      return signals.filter(signal => signal.type === 'LONG');
-    } else if (seasonalSentiment === 'bearish') {
-      return signals.filter(signal => signal.type === 'SHORT');
+    // Calculate take profit price based on entry and RRR
+    const distance = Math.abs(signal.entry_price - signal.stop_loss);
+    const targetMove = distance * baseRRR;
+    
+    // Calculate new take profit price
+    if (signal.type === 'LONG') {
+      return {
+        take_profit: signal.entry_price + targetMove,
+        risk_reward_ratio: baseRRR
+      };
+    } else {
+      return {
+        take_profit: signal.entry_price - targetMove,
+        risk_reward_ratio: baseRRR
+      };
     }
-    
-    return signals;
+  };
+
+  // Apply RRR adjustments to signals
+  const adjustedSignals = useMemo(() => {
+    return signals.map(signal => {
+      const { take_profit, risk_reward_ratio } = calculateRRR(signal);
+      return {
+        ...signal,
+        take_profit,
+        risk_reward_ratio
+      };
+    });
   }, [signals, seasonalSentiment]);
 
   const getStatusColor = (status: string) => {
@@ -100,18 +119,18 @@ const SignalsList = ({ signals, seasonalSentiment, isLoading }: SignalsListProps
               seasonalSentiment === 'bearish' ? 'bg-red-500/20 text-red-400' : 
               'bg-yellow-500/20 text-yellow-400'}`}
           >
-            {seasonalSentiment.toUpperCase()}
+            {seasonalSentiment.toUpperCase()} ({seasonalSentiment === 'neutral' ? '2:1' : '3:1'} RRR)
           </span>
         </div>
       </div>
 
-      {filteredSignals.length === 0 ? (
+      {adjustedSignals.length === 0 ? (
         <div className="text-center py-8 text-gray-400">
           No signals available for the current seasonality filter
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredSignals.map((signal) => (
+          {adjustedSignals.map((signal) => (
             <div key={signal.id} className="bg-slate-700 rounded-lg p-4">
               <div className="flex justify-between items-start">
                 <div>
