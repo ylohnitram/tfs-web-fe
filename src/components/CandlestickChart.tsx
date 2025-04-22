@@ -16,12 +16,13 @@ const CandlestickChart = ({ data, symbol, timeframe }: CandlestickChartProps) =>
   useEffect(() => {
     if (!chartContainerRef.current || data.length === 0) return;
 
-    // Clear previous chart if it exists
+    // If chart already exists, destroy it properly first
     if (chartRef.current) {
       chartRef.current.remove();
+      chartRef.current = null;
     }
 
-    // Create chart
+    // Create new chart
     const chart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: 400,
@@ -76,8 +77,8 @@ const CandlestickChart = ({ data, symbol, timeframe }: CandlestickChartProps) =>
 
     // Handle resize
     const handleResize = () => {
-      if (chartContainerRef.current && chart) {
-        chart.applyOptions({ 
+      if (chartContainerRef.current && chartRef.current) {
+        chartRef.current.applyOptions({ 
           width: chartContainerRef.current.clientWidth 
         });
       }
@@ -85,11 +86,18 @@ const CandlestickChart = ({ data, symbol, timeframe }: CandlestickChartProps) =>
 
     window.addEventListener('resize', handleResize);
 
-    // Clean up
+    // Cleanup function - ensure proper disposal of chart
     return () => {
       window.removeEventListener('resize', handleResize);
+      
+      // Check if chart still exists before removing it
       if (chartRef.current) {
-        chartRef.current.remove();
+        try {
+          chartRef.current.remove();
+        } catch (e) {
+          console.error('Error removing chart:', e);
+        }
+        chartRef.current = null;
       }
     };
   }, [data]);
