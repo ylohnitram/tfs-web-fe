@@ -31,16 +31,19 @@ const SignalsList = ({ signals, seasonalSentiment, isLoading }: SignalsListProps
     }
   };
 
-  // Apply RRR adjustments to signals
+  // Apply RRR adjustments to signals and limit to 3 most recent
   const adjustedSignals = useMemo(() => {
-    return signals.map(signal => {
-      const { take_profit, risk_reward_ratio } = calculateRRR(signal);
-      return {
-        ...signal,
-        take_profit,
-        risk_reward_ratio
-      };
-    });
+    return signals
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 3)
+      .map(signal => {
+        const { take_profit, risk_reward_ratio } = calculateRRR(signal);
+        return {
+          ...signal,
+          take_profit,
+          risk_reward_ratio
+        };
+      });
   }, [signals, seasonalSentiment]);
 
   const getStatusColor = (status: string) => {
@@ -110,7 +113,7 @@ const SignalsList = ({ signals, seasonalSentiment, isLoading }: SignalsListProps
   return (
     <div className="bg-slate-800 rounded-lg p-4 shadow-lg">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white">Trading Signals</h2>
+        <h2 className="text-xl font-semibold text-white">Latest Trading Signals</h2>
         <div className="flex items-center">
           <span className="text-gray-400 mr-2">Seasonality Filter:</span>
           <span 
