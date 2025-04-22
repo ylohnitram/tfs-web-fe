@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gray-900 text-white shadow-md">
+    <header className="bg-gray-900 text-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
