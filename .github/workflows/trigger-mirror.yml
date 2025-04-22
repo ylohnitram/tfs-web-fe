@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Trigger mirror repo
         run: |
-          curl -X POST https://api.github.com/repos/ylohnitram/tfs-web-fe/dispatches \
+          set -eou pipefail
+          curl -fk -X POST https://api.github.com/repos/ylohnitram/tfs-web-fe/dispatches \
             -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token ${{ secrets.GH_PAT_MIRROR }}" \
             -d '{"event_type": "mirror_trigger"}'
