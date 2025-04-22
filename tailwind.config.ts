@@ -12,9 +12,13 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '1rem',
 			screens: {
-				'2xl': '1400px'
+				sm: '640px',
+				md: '768px',
+				lg: '1024px',
+				xl: '1280px',
+				'2xl': '1400px',
 			}
 		},
 		extend: {
@@ -61,6 +65,30 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Trading specific colors
+				bullish: {
+					DEFAULT: '#10B981',
+					hover: '#059669',
+					light: '#D1FAE5',
+					dark: '#065F46',
+				},
+				bearish: {
+					DEFAULT: '#EF4444',
+					hover: '#DC2626',
+					light: '#FEE2E2',
+					dark: '#991B1B',
+				},
+				neutral: {
+					DEFAULT: '#F59E0B',
+					hover: '#D97706',
+					light: '#FEF3C7',
+					dark: '#92400E',
+				},
+				chart: {
+					background: '#1E293B',
+					grid: '#334155',
+					text: '#94A3B8',
 				}
 			},
 			borderRadius: {
@@ -84,11 +112,31 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'pulse-light': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.5'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'pulse-light': 'pulse-light 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			}
 		}
 	},
