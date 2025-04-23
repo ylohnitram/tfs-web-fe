@@ -86,7 +86,7 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
           <div className="text-sm text-gray-400">Historical Probability</div>
           <div className="text-xl font-semibold text-white">{monthlySeasonality.percentage.toFixed(2)}%</div>
           <div className="text-sm text-gray-400 mt-1">
-            Based on {monthlySeasonality.total_days} historical occurrences
+            Based on historical data from {monthlySeasonality.year} years
           </div>
         </div>
       </div>
