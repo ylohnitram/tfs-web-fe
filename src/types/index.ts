@@ -54,6 +54,7 @@ export interface MonthlySeasonality {
   total_days: number;
   percentage: number;
   sentiment: SeasonalitySentiment;
+  years_count?: number; // Added years_count property
 }
 
 export interface SeasonalityResponse {

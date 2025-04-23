@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import type { MonthlySeasonality } from '@/types';
 

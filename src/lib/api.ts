@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import type { OHLCVResponse, SignalsResponse, SeasonalityResponse, PairsResponse } from '@/types';
 
@@ -14,49 +13,49 @@ const api = axios.create({
 });
 
 // API service functions
-export const fetchOHLCV = async (symbol: string, timeframe: string): Promise<OHLCVResponse> => {
+export const fetchOHLCV = async (symbol: string, timeframe: string): Promise<OHLCVResponse | null> => {
   try {
     const response = await api.get<OHLCVResponse>(`/api/ohlcv/${symbol}/${timeframe}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching OHLCV data:', error);
-    return mockOHLCVData(symbol, timeframe);
+    return null;
   }
 };
 
-export const fetchSignals = async (symbol: string, timeframe?: string): Promise<SignalsResponse> => {
+export const fetchSignals = async (symbol: string, timeframe?: string): Promise<SignalsResponse | null> => {
   try {
     const endpoint = timeframe ? `/api/signals/${symbol}/${timeframe}` : `/api/signals/${symbol}`;
     const response = await api.get<SignalsResponse>(endpoint);
     return response.data;
   } catch (error) {
     console.error('Error fetching signals:', error);
-    return mockSignalsData(symbol, timeframe);
+    return null;
   }
 };
 
-export const fetchSeasonality = async (symbol: string): Promise<SeasonalityResponse> => {
+export const fetchSeasonality = async (symbol: string): Promise<SeasonalityResponse | null> => {
   try {
     const response = await api.get<SeasonalityResponse>(`/api/seasonality/analysis/${symbol}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching seasonality:', error);
-    return mockSeasonalityData(symbol);
+    return null;
   }
 };
 
-export const fetchPairs = async (): Promise<PairsResponse> => {
+export const fetchPairs = async (): Promise<PairsResponse | null> => {
   try {
     const response = await api.get<PairsResponse>('/api/pairs');
     return response.data;
   } catch (error) {
     console.error('Error fetching pairs:', error);
-    return mockPairsData();
+    return null;
   }
 };
 
 // Mock data for development
-export const mockOHLCVData = (symbol: string, timeframe: string): OHLCVResponse => {
+const mockOHLCVData = (symbol: string, timeframe: string): OHLCVResponse => {
   const now = Math.floor(Date.now() / 1000);
   const candles = [];
   
@@ -101,7 +100,7 @@ export const mockOHLCVData = (symbol: string, timeframe: string): OHLCVResponse 
   };
 };
 
-export const mockSignalsData = (symbol: string, timeframe?: string): SignalsResponse => {
+const mockSignalsData = (symbol: string, timeframe?: string): SignalsResponse => {
   const signals = [];
   const defaultTimeframe = timeframe || '1h';
   
@@ -145,7 +144,7 @@ export const mockSignalsData = (symbol: string, timeframe?: string): SignalsResp
   };
 };
 
-export const mockSeasonalityData = (symbol: string): SeasonalityResponse => {
+const mockSeasonalityData = (symbol: string): SeasonalityResponse => {
   const months = [];
   const currentYear = new Date().getFullYear();
   
@@ -187,7 +186,7 @@ export const mockSeasonalityData = (symbol: string): SeasonalityResponse => {
   };
 };
 
-export const mockPairsData = (): PairsResponse => {
+const mockPairsData = (): PairsResponse => {
   return {
     pairs: [
       {
