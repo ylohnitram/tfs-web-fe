@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import type { MonthlySeasonality } from '@/types';
 
@@ -55,6 +56,9 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
 
   const trend = getMonthlyTrend(monthlySeasonality.percentage);
 
+  // Compute the number of unique years in the data
+  const yearsCount = monthlySeasonality.years_count || 0;
+
   return (
     <div className="bg-slate-800 rounded-lg p-4 shadow-lg">
       <h2 className="text-xl font-semibold text-white mb-4">Seasonality Analysis - {currentMonth}</h2>
@@ -86,7 +90,7 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
           <div className="text-sm text-gray-400">Historical Probability</div>
           <div className="text-xl font-semibold text-white">{monthlySeasonality.percentage.toFixed(2)}%</div>
           <div className="text-sm text-gray-400 mt-1">
-            Based on historical data from {monthlySeasonality.year} years
+            Based on historical data from {yearsCount} years
           </div>
         </div>
       </div>
@@ -104,3 +108,4 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
 };
 
 export default SeasonalityAnalysis;
+
