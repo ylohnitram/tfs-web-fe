@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import type { MonthlySeasonality } from '@/types';
 
@@ -54,10 +53,9 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
     );
   }
 
-  const trend = getMonthlyTrend(monthlySeasonality.percentage);
+  const yearsCount = monthlySeasonality?.years_count || 0;
 
-  // Compute the number of unique years in the data
-  const yearsCount = monthlySeasonality.years_count || 0;
+  const trend = getMonthlyTrend(monthlySeasonality.percentage);
 
   return (
     <div className="bg-slate-800 rounded-lg p-4 shadow-lg">
@@ -108,4 +106,3 @@ const SeasonalityAnalysis = ({ monthlySeasonality, isLoading }: SeasonalityAnaly
 };
 
 export default SeasonalityAnalysis;
-
